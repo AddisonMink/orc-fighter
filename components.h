@@ -19,6 +19,7 @@ void BodyInit(Body *body, Point p);
 typedef enum MoveState
 {
     MOVE_STILL,
+    MOVE_STARTING,
     MOVE_MOVING
 } MoveState;
 
@@ -29,12 +30,20 @@ typedef struct Move
     MoveState state;
     float speed;
     Direction dir;
-    Vector3 dest;
+    Point dest;
 } Move;
 
 void MoveInit(Move *move, float speed);
 void MoveStart(Body *body, Move *move, Direction dir);
 
+// Component
+typedef struct Draw
+{
+    bool valid;
+    Color color;
+} Draw;
+
+void DrawInit(Draw *draw, Color color);
 
 typedef enum PlayerState
 {
@@ -52,11 +61,22 @@ typedef struct Player
 
 void PlayerInit(Player *player);
 
+// Component
+typedef struct Orc
+{
+    bool valid;
+} Orc;
+
+void OrcInit(Orc *orc);
+
 typedef struct World
 {
+    bool valids[NUM_ENTITIES];
     Body bodies[NUM_ENTITIES];
     Move moves[NUM_ENTITIES];
+    Draw draws[NUM_ENTITIES];
     Player players[NUM_ENTITIES];
+    Orc orcs[NUM_ENTITIES];
 } World;
 
 void WorldInit(World *world);
@@ -66,9 +86,16 @@ void WorldRunSystems(
     Camera3D *camera,
     float delta);
 
+void WorldRunDraw3DSystems(
+    World *world);
+
 void WorldAddPlayer(
     World *world,
     Camera3D *camera,
+    Point p);
+
+int WorldAddOrc(
+    World *world,
     Point p);
 
 #endif

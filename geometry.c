@@ -49,6 +49,16 @@ Direction DirectionFace(Direction dir, RelativeDirection rel)
     }
 }
 
+bool PointEqual(Point p1, Point p2)
+{
+    return p1.x == p2.x && p1.y == p2.y;
+}
+
+Point PointAdd(Point p1, Point p2)
+{
+    return (Point){p1.x + p2.x, p1.y + p2.y};
+}
+
 Vector3 PointToVector(Point p)
 {
     return (Vector3){p.x * TILE_SIZE, 0, p.y * TILE_SIZE};

@@ -14,7 +14,8 @@ int main(void)
 
     World world;
     WorldInit(&world);
-    WorldAddPlayer(&world, &camera, (Point){5, 5});   
+    WorldAddPlayer(&world, &camera, (Point){5, 5});
+    WorldAddOrc(&world, (Point){5, 8});
 
     SetTargetFPS(60);
 
@@ -25,10 +26,7 @@ int main(void)
         BeginDrawing();
         ClearBackground(BLACK);
         BeginMode3D(camera);
-
-        DrawCube((Vector3){5, 0, 8}, 1, 1, 1, RED);
-        DrawCubeWires((Vector3){5, 0, 8}, 1, 1, 1, MAROON);
-
+        WorldRunDraw3DSystems(&world);
         EndMode3D();
         EndDrawing();
     }

@@ -31,6 +31,10 @@ typedef struct Point
     int y;
 } Point;
 
+bool PointEqual(Point p1, Point p2);
+
+Point PointAdd(Point p1, Point p2);
+
 Vector3 PointToVector(Point p);
 
 Point PointFromVector(Vector3 v);
