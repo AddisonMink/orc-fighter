@@ -14,8 +14,7 @@ int main(void)
 
     World world;
     WorldInit(&world);
-    WorldAddPlayer(&world, &camera, (Point){5, 5});
-    MoveStart(&world.bodies[PLAYER_ID], &world.moves[PLAYER_ID], NORTH);
+    WorldAddPlayer(&world, &camera, (Point){5, 5});   
 
     SetTargetFPS(60);
 

@@ -7,9 +7,46 @@ const Vector3 DIRECTION_VECTORS[4] = {
     (Vector3){-1, 0, 0}  // West
 };
 
-Vector3 DirectionVector(Direction dir)
+const Direction DIRECTION_RIGHTS[4] = {
+    EAST,
+    WEST,
+    SOUTH,
+    NORTH,
+};
+
+const Direction DIRECTION_LEFTS[4] = {
+    WEST,
+    EAST,
+    NORTH,
+    SOUTH,
+};
+
+const Direction DIRECTION_REVERSES[4] = {
+    SOUTH,
+    NORTH,
+    WEST,
+    EAST,
+};
+
+Vector3
+DirectionVector(Direction dir)
 {
     return DIRECTION_VECTORS[dir];
+}
+
+Direction DirectionFace(Direction dir, RelativeDirection rel)
+{
+    switch (rel)
+    {
+    case FORWARD:
+        return dir;
+    case BACK:
+        return DIRECTION_REVERSES[dir];
+    case LEFT:
+        return DIRECTION_LEFTS[dir];
+    case RIGHT:
+        return DIRECTION_RIGHTS[dir];
+    }
 }
 
 Vector3 PointToVector(Point p)

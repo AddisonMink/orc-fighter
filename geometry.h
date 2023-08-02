@@ -13,7 +13,17 @@ typedef enum Direction
     WEST
 } Direction;
 
+typedef enum RelativeDirection
+{
+    FORWARD,
+    BACK,
+    RIGHT,
+    LEFT
+} RelativeDirection;
+
 Vector3 DirectionVector(Direction dir);
+
+Direction DirectionFace(Direction dir, RelativeDirection rel);
 
 typedef struct Point
 {

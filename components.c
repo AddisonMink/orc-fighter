@@ -19,7 +19,7 @@ void MoveInit(Move *move, float speed)
 void MoveStart(Body *body, Move *move, Direction dir)
 {
     move->dir = dir;
-    move->dest = Vector3Add(body->pos, DirectionVector(dir));
+    move->dest = Vector3Add(body->pos, Vector3Scale(DirectionVector(dir), TILE_SIZE));
     move->state = MOVE_MOVING;
 }
 
