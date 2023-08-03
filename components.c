@@ -1,5 +1,6 @@
 #include <components.h>
 #include <raymath.h>
+#include <drawhudsystem.h>
 #include <drawsystem.h>
 #include <movesystem.h>
 #include <observersystem.h>
@@ -53,6 +54,7 @@ void PlayerInit(Player *player)
     player->valid = true;
     player->state = PLAYER_STANDING;
     player->facing = NORTH;
+    player->attackCooldown = 0;
 }
 
 void OrcInit(Orc *orc)
@@ -109,6 +111,7 @@ void WorldRunDraw3DSystems(World *world)
 void WorldRunDraw2DSystems(World *world)
 {
     OverlaySpriteSystem(world->overlaySprites);
+    DrawHudSystem(world->players);
 }
 
 void WorldClearEntity(World *world, Id id)

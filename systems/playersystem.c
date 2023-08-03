@@ -3,6 +3,7 @@
 
 #define PLAYER_TURNING_SPEED PI
 #define PLAYER_ATTACK_DURATION 0.5
+#define PLAYER_ATTACK_COOLDOWN 1.0
 
 void PlayerUpdateCamera(Body *body, Player *player, Camera3D *camera);
 
@@ -18,13 +19,14 @@ void PlayerSystem(
     Move *move = &moves[PLAYER_ID];
     Player *player = &players[PLAYER_ID];
 
-    Point p = PointFromVector(body->pos);
+    if (player->attackCooldown > 0)
+        player->attackCooldown -= delta;
 
     switch (player->state)
     {
     case PLAYER_STANDING:
     {
-        if (IsKeyPressed(KEY_SPACE))
+        if (IsKeyPressed(KEY_SPACE) && player->attackCooldown <= 0)
         {
             Point p = PointAddDirection(PointFromVector(body->pos), player->facing);
             player->attackingId = WorldAddPlayerAttack(world, p);
@@ -99,6 +101,7 @@ void PlayerSystem(
         if (player->attackingTimer <= 0)
         {
             WorldClearEntity(world, player->attackingId);
+            player->attackCooldown = PLAYER_ATTACK_COOLDOWN;
             player->state = PLAYER_STANDING;
         }
     }

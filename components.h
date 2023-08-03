@@ -87,6 +87,7 @@ typedef struct Player
     PlayerState state;
     Direction facing;
     RelativeDirection turningDir;
+    float attackCooldown;
     float turningProgress;
     float attackingTimer;
     Id attackingId;
