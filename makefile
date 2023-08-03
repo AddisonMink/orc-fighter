@@ -20,6 +20,7 @@ game:
 	geometry.c \
 	components.c \
 	textures.c \
+	systems/damagesystem.c \
 	systems/drawhudsystem.c \
 	systems/drawsystem.c \
 	systems/movesystem.c \

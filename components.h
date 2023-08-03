@@ -64,6 +64,7 @@ typedef struct Observer
 
 void ObserverInit(Observer *observer);
 
+// Component
 typedef struct OverlaySprite
 {
     Id id;
@@ -71,6 +72,31 @@ typedef struct OverlaySprite
 } OverlaySprite;
 
 void OverlaySpriteInit(OverlaySprite *sprite);
+
+// Component
+typedef struct Defence
+{
+    Id id;
+    bool valid;
+} Defence;
+
+void DefenceInit(Defence *defence);
+
+typedef enum HurtboxLayer
+{
+    HURTBOX_PLAYER,
+    HURTBOX_ENEMY,
+} HurtboxLayer;
+
+// Component
+typedef struct Hurtbox
+{
+    Id id;
+    bool valid;
+    HurtboxLayer layer;
+} Hurtbox;
+
+void HurtboxInit(Hurtbox *hurtbox, HurtboxLayer layer);
 
 typedef enum PlayerState
 {
@@ -120,6 +146,8 @@ typedef struct World
     Draw draws[NUM_ENTITIES];
     Observer observers[NUM_ENTITIES];
     OverlaySprite overlaySprites[NUM_ENTITIES];
+    Defence defences[NUM_ENTITIES];
+    Hurtbox hurtboxes[NUM_ENTITIES];
     Player players[NUM_ENTITIES];
     Orc orcs[NUM_ENTITIES];
 } World;

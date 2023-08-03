@@ -8,6 +8,7 @@
 #include <overlayspritesystem.h>
 #include <playersystem.h>
 #include <textures.h>
+#include <damagesystem.h>
 
 void BodyInit(Body *body, Point p)
 {
@@ -51,6 +52,17 @@ void OverlaySpriteInit(OverlaySprite *sprite)
     sprite->valid = true;
 }
 
+void DefenceInit(Defence *defence)
+{
+    defence->valid = true;
+}
+
+void HurtboxInit(Hurtbox *hurtbox, HurtboxLayer layer)
+{
+    hurtbox->valid = true;
+    hurtbox->layer = layer;
+}
+
 void PlayerInit(Player *player)
 {
     player->valid = true;
@@ -86,6 +98,12 @@ void WorldInit(World *world)
         world->overlaySprites[i].id = i;
         world->overlaySprites[i].valid = false;
 
+        world->defences[i].id = i;
+        world->defences[i].valid = false;
+
+        world->hurtboxes[i].id = i;
+        world->hurtboxes[i].valid = false;
+
         world->players[i].id = i;
         world->players[i].valid = false;
 
@@ -103,6 +121,7 @@ void WorldRunSystems(
     PlayerSystem(world, world->bodies, world->moves, world->players, camera, delta);
     OrcSystem(world->bodies, world->moves, world->observers, world->orcs);
     MoveSystem(world->bodies, world->moves, delta);
+    DamageSystem(world, world->bodies, world->hurtboxes, world->defences);
 }
 
 void WorldRunDraw3DSystems(World *world, Camera3D *camera)
@@ -124,6 +143,8 @@ void WorldClearEntity(World *world, Id id)
     world->draws[id].valid = false;
     world->observers[id].valid = false;
     world->overlaySprites[id].valid = false;
+    world->defences[id].valid = false;
+    world->hurtboxes[id].valid = false;
     world->orcs[id].valid = false;
     world->players[id].valid = false;
 }
@@ -164,7 +185,9 @@ Id WorldAddPlayerAttack(
     if (id < 0)
         return id;
 
+    BodyInit(&world->bodies[id], p);
     OverlaySpriteInit(&world->overlaySprites[id]);
+    HurtboxInit(&world->hurtboxes[id], HURTBOX_ENEMY);
     return id;
 }
 
@@ -183,6 +206,7 @@ Id WorldAddOrc(
     MoveInit(&world->moves[id], moveSpeed, moveCooldown);
     DrawInit(&world->draws[id], MonstersTexture, ORC_STANDING_FRAME);
     ObserverInit(&world->observers[id]);
+    DefenceInit(&world->defences[id]);
     OrcInit(&world->orcs[id]);
     return id;
 }
