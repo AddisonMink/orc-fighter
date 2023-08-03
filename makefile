@@ -19,6 +19,7 @@ game:
 	$(CC) main.c \
 	geometry.c \
 	components.c \
+	textures.c \
 	systems/drawhudsystem.c \
 	systems/drawsystem.c \
 	systems/movesystem.c \

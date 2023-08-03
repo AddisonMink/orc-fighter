@@ -47,10 +47,11 @@ typedef struct Draw
 {
     Id id;
     bool valid;
-    Color color;
+    Texture2D texture;
+    Rectangle frame;
 } Draw;
 
-void DrawInit(Draw *draw, Color color);
+void DrawInit(Draw *draw, Texture2D texture, Rectangle frame);
 
 // Component
 typedef struct Observer
@@ -130,7 +131,7 @@ void WorldRunSystems(
     Camera3D *camera,
     float delta);
 
-void WorldRunDraw3DSystems(World *world);
+void WorldRunDraw3DSystems(World *world, Camera3D *camera);
 
 void WorldRunDraw2DSystems(World *world);
 

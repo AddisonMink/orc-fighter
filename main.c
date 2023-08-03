@@ -9,6 +9,7 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "Orc Fighter!");
 
     PlayerAttackTexture = LoadTexture("resources/player-attack.png");
+    MonstersTexture = LoadTexture("resources/monsters.png");
 
     Camera3D camera = {0};
     camera.up = (Vector3){0.0f, 1.0f, 0.0f};
@@ -30,7 +31,7 @@ int main(void)
         ClearBackground(BLACK);
 
         BeginMode3D(camera);
-        WorldRunDraw3DSystems(&world);
+        WorldRunDraw3DSystems(&world, &camera);
         EndMode3D();
 
         WorldRunDraw2DSystems(&world);
@@ -39,5 +40,6 @@ int main(void)
 
     CloseWindow();
     UnloadTexture(PlayerAttackTexture);
+    UnloadTexture(MonstersTexture);
     return 0;
 }

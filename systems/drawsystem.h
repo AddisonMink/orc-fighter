@@ -5,6 +5,7 @@
 
 void DrawSystem(
     Body *bodies,
-    Draw *draws);
+    Draw *draws,
+    Camera3D *camera);
 
 #endif

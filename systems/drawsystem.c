@@ -2,7 +2,8 @@
 
 void DrawSystem(
     Body *bodies,
-    Draw *draws)
+    Draw *draws,
+    Camera3D *camera)
 {
     for (int i = 0; i < NUM_ENTITIES; i++)
     {
@@ -10,7 +11,7 @@ void DrawSystem(
         Draw *draw = &draws[i];
         if (draw->valid && body->valid)
         {
-            DrawCube(body->pos, TILE_SIZE, TILE_SIZE, TILE_SIZE, draw->color);
+            DrawBillboardRec(*camera, draw->texture, draw->frame, body->pos, (Vector2){TILE_SIZE, TILE_SIZE}, WHITE);
         }
     }
 }

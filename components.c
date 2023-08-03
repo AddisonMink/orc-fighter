@@ -7,6 +7,7 @@
 #include <orcsystem.h>
 #include <overlayspritesystem.h>
 #include <playersystem.h>
+#include <textures.h>
 
 void BodyInit(Body *body, Point p)
 {
@@ -32,10 +33,11 @@ void MoveStart(Body *body, Move *move, Direction dir)
     move->state = MOVE_STARTING;
 }
 
-void DrawInit(Draw *draw, Color color)
+void DrawInit(Draw *draw, Texture2D texture, Rectangle frame)
 {
     draw->valid = true;
-    draw->color = color;
+    draw->texture = texture;
+    draw->frame = frame;
 }
 
 void ObserverInit(Observer *observer)
@@ -103,9 +105,9 @@ void WorldRunSystems(
     MoveSystem(world->bodies, world->moves, delta);
 }
 
-void WorldRunDraw3DSystems(World *world)
+void WorldRunDraw3DSystems(World *world, Camera3D *camera)
 {
-    DrawSystem(world->bodies, world->draws);
+    DrawSystem(world->bodies, world->draws, camera);
 }
 
 void WorldRunDraw2DSystems(World *world)
@@ -174,12 +176,12 @@ Id WorldAddOrc(
     if (id < 0)
         return id;
 
-    const float moveSpeed = 3.0;
-    const float mvoeCooldown = 0.1;
+    const float moveSpeed = 2.5;
+    const float moveCooldown = 0.1;
 
     BodyInit(&world->bodies[id], p);
-    MoveInit(&world->moves[id], moveSpeed, mvoeCooldown);
-    DrawInit(&world->draws[id], DARKGREEN);
+    MoveInit(&world->moves[id], moveSpeed, moveCooldown);
+    DrawInit(&world->draws[id], MonstersTexture, ORC_STANDING_FRAME);
     ObserverInit(&world->observers[id]);
     OrcInit(&world->orcs[id]);
     return id;
