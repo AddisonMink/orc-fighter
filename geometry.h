@@ -43,6 +43,8 @@ Direction PointToward(Point p1, Point p2);
 
 Point PointAddDirection(Point p, Direction dir);
 
+float PointDistance(Point p1, Point p2);
+
 Vector3 PointToVector(Point p);
 
 Point PointFromVector(Vector3 v);

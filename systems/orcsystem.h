@@ -6,7 +6,9 @@
 void OrcSystem(
     Body *bodies,
     Move *moves,
+    Draw *draws,
     Observer *observers,
-    Orc *orcs);
+    Orc *orcs,
+    float delta);
 
 #endif

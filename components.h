@@ -126,6 +126,8 @@ typedef enum OrcState
 {
     ORC_STANDING,
     ORC_STEPPING,
+    ORC_WINDING_UP,
+    ORC_ATTACKING,
 } OrcState;
 
 // Component
@@ -134,6 +136,9 @@ typedef struct Orc
     Id id;
     bool valid;
     OrcState state;
+    float attackCooldown;
+    float windingUpTimer;
+    float attackingTimer;
 } Orc;
 
 void OrcInit(Orc *orc);

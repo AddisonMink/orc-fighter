@@ -75,6 +75,7 @@ void OrcInit(Orc *orc)
 {
     orc->valid = true;
     orc->state = ORC_STANDING;
+    orc->attackCooldown = 0;
 }
 
 void WorldInit(World *world)
@@ -119,7 +120,7 @@ void WorldRunSystems(
 {
     ObserverSystem(world->bodies, world->observers, world->players);
     PlayerSystem(world, world->bodies, world->moves, world->players, camera, delta);
-    OrcSystem(world->bodies, world->moves, world->observers, world->orcs);
+    OrcSystem(world->bodies, world->moves, world->draws, world->observers, world->orcs, delta);
     MoveSystem(world->bodies, world->moves, delta);
     DamageSystem(world, world->bodies, world->hurtboxes, world->defences);
 }

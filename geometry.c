@@ -99,6 +99,13 @@ Point PointAddDirection(Point p, Direction dir)
     return PointAdd(p, DIRECTION_POINTS[dir]);
 }
 
+float PointDistance(Point p1, Point p2)
+{
+    int dx = p2.x - p1.x;
+    int dy = p2.y - p1.y;
+    return sqrt(dx * dx + dy * dy);
+}
+
 Vector3 PointToVector(Point p)
 {
     return (Vector3){p.x * TILE_SIZE, 0, p.y * TILE_SIZE};
