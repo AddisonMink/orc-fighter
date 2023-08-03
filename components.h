@@ -33,11 +33,13 @@ typedef struct Move
     bool valid;
     MoveState state;
     float speed;
+    float cooldown;
+    float cooldownTimer;
     Direction dir;
     Point dest;
 } Move;
 
-void MoveInit(Move *move, float speed);
+void MoveInit(Move *move, float speed, float cooldown);
 void MoveStart(Body *body, Move *move, Direction dir);
 
 // Component

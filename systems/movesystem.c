@@ -1,7 +1,7 @@
 #include <movesystem.h>
 #include <raymath.h>
 
-#define TOLERANCE 0.1
+#define TOLERANCE 0.05
 
 bool MoveIsBlocked(Body *bodies, Move *moves, int id, Point pos);
 void MoveUpdate(Body *body, Move *move, float delta);
@@ -60,7 +60,11 @@ void MoveUpdate(Body *body, Move *move, float delta)
     switch (move->state)
     {
     case MOVE_STILL:
-        break;
+    {
+        if (move->cooldownTimer > 0)
+            move->cooldownTimer -= delta;
+    }
+    break;
 
     case MOVE_STARTING:
     {
@@ -79,6 +83,7 @@ void MoveUpdate(Body *body, Move *move, float delta)
         {
             body->pos = PointToVector(move->dest);
             move->state = MOVE_STILL;
+            move->cooldownTimer = move->cooldown;
         }
     }
     break;

@@ -12,15 +12,19 @@ void BodyInit(Body *body, Point p)
     body->pos = PointToVector(p);
 }
 
-void MoveInit(Move *move, float speed)
+void MoveInit(Move *move, float speed, float cooldown)
 {
     move->valid = true;
     move->speed = speed;
+    move->cooldown = cooldown;
+    move->cooldownTimer = 0;
     move->state = MOVE_STILL;
 }
 
 void MoveStart(Body *body, Move *move, Direction dir)
 {
+    if (move->cooldownTimer > 0)
+        return;
     move->dir = dir;
     move->dest = PointAddDirection(PointFromVector(body->pos), dir);
     move->state = MOVE_STARTING;
@@ -100,10 +104,11 @@ void WorldAddPlayer(
     Point p)
 {
     const float moveSpeed = 5.0;
+    const float mvoeCooldown = 0.1;
 
     world->valids[PLAYER_ID] = true;
     BodyInit(&world->bodies[PLAYER_ID], p);
-    MoveInit(&world->moves[PLAYER_ID], moveSpeed);
+    MoveInit(&world->moves[PLAYER_ID], moveSpeed, mvoeCooldown);
     PlayerInit(&world->players[PLAYER_ID]);
 }
 
@@ -123,10 +128,11 @@ int WorldAddOrc(
     if (id < 1)
         return -1;
 
-    const float moveSpeed = 0.5;
+    const float moveSpeed = 3.0;
+    const float mvoeCooldown = 0.1;
 
     BodyInit(&world->bodies[id], p);
-    MoveInit(&world->moves[id], moveSpeed);
+    MoveInit(&world->moves[id], moveSpeed, mvoeCooldown);
     DrawInit(&world->draws[id], DARKGREEN);
     ObserverInit(&world->observers[id]);
     OrcInit(&world->orcs[id]);
