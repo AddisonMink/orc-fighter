@@ -139,6 +139,8 @@ typedef struct Orc
     float attackCooldown;
     float windingUpTimer;
     float attackingTimer;
+    Direction attackingDirection;
+    Id attackingId;
 } Orc;
 
 void OrcInit(Orc *orc);
@@ -180,6 +182,10 @@ Id WorldAddPlayerAttack(
     Point p);
 
 Id WorldAddOrc(
+    World *world,
+    Point p);
+
+Id WorldAddOrcAttack(
     World *world,
     Point p);
 

@@ -120,7 +120,7 @@ void WorldRunSystems(
 {
     ObserverSystem(world->bodies, world->observers, world->players);
     PlayerSystem(world, world->bodies, world->moves, world->players, camera, delta);
-    OrcSystem(world->bodies, world->moves, world->draws, world->observers, world->orcs, delta);
+    OrcSystem(world, world->bodies, world->moves, world->draws, world->observers, world->orcs, delta);
     MoveSystem(world->bodies, world->moves, delta);
     DamageSystem(world, world->bodies, world->hurtboxes, world->defences);
 }
@@ -175,6 +175,7 @@ void WorldAddPlayer(
     world->valids[PLAYER_ID] = true;
     BodyInit(&world->bodies[PLAYER_ID], p);
     MoveInit(&world->moves[PLAYER_ID], moveSpeed, mvoeCooldown);
+    DefenceInit(&world->defences[PLAYER_ID]);
     PlayerInit(&world->players[PLAYER_ID]);
 }
 
@@ -209,5 +210,18 @@ Id WorldAddOrc(
     ObserverInit(&world->observers[id]);
     DefenceInit(&world->defences[id]);
     OrcInit(&world->orcs[id]);
+    return id;
+}
+
+Id WorldAddOrcAttack(
+    World *world,
+    Point p)
+{
+    Id id = WorldInitEntity(world);
+    if (id < 0)
+        return id;
+
+    BodyInit(&world->bodies[id], p);
+    HurtboxInit(&world->hurtboxes[id], HURTBOX_PLAYER);
     return id;
 }

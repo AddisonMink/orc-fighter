@@ -6,6 +6,7 @@
 #define ORC_ATTACK_COOLDOWN 1.0
 
 void OrcUpdate(
+    World *world,
     Body *body,
     Move *move,
     Draw *draw,
@@ -14,6 +15,7 @@ void OrcUpdate(
     float delta);
 
 void OrcSystem(
+    World *world,
     Body *bodies,
     Move *moves,
     Draw *draws,
@@ -31,11 +33,12 @@ void OrcSystem(
         Draw *draw = &draws[i];
         Observer *oberver = &observers[i];
         Orc *orc = &orcs[i];
-        OrcUpdate(body, move, draw, oberver, orc, delta);
+        OrcUpdate(world, body, move, draw, oberver, orc, delta);
     }
 }
 
 void OrcUpdate(
+    World *world,
     Body *body,
     Move *move,
     Draw *draw,
@@ -58,6 +61,7 @@ void OrcUpdate(
         {
             draw->frame = ORC_WINDUP_FRAME;
             orc->windingUpTimer = ORC_WINDUP_DURATION;
+            orc->attackingDirection = PointToward(PointFromVector(body->pos), observer->playerPos);
             orc->state = ORC_WINDING_UP;
         }
         else if (move->state == MOVE_STILL)
@@ -83,9 +87,20 @@ void OrcUpdate(
         orc->windingUpTimer -= delta;
         if (orc->windingUpTimer <= 0)
         {
-            draw->frame = ORC_ATTACK_FRAME;
-            orc->attackingTimer = ORC_ATTACK_DURATION;
-            orc->state = ORC_ATTACKING;
+
+            Point p = PointAddDirection(PointFromVector(body->pos), orc->attackingDirection);
+            Id id = WorldAddOrcAttack(world, p);
+            if (id < 0)
+            {
+                orc->state = ORC_STANDING;
+            }
+            else
+            {
+                draw->frame = ORC_ATTACK_FRAME;
+                orc->attackingTimer = ORC_ATTACK_DURATION;
+                orc->attackingId = id;
+                orc->state = ORC_ATTACKING;
+            }
         }
     }
     break;
@@ -95,6 +110,7 @@ void OrcUpdate(
         orc->attackingTimer -= delta;
         if (orc->attackingTimer <= 0)
         {
+            WorldClearEntity(world, orc->attackingId);
             draw->frame = ORC_STANDING_FRAME;
             orc->attackCooldown = ORC_ATTACK_COOLDOWN;
             orc->state = ORC_STANDING;

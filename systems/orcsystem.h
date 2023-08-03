@@ -4,6 +4,7 @@
 #include <components.h>
 
 void OrcSystem(
+    World *world,
     Body *bodies,
     Move *moves,
     Draw *draws,
