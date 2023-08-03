@@ -2,10 +2,12 @@
 #include <raymath.h>
 
 #define PLAYER_TURNING_SPEED PI
+#define PLAYER_ATTACK_DURATION 0.5
 
 void PlayerUpdateCamera(Body *body, Player *player, Camera3D *camera);
 
 void PlayerSystem(
+    World *world,
     Body *bodies,
     Move *moves,
     Player *players,
@@ -22,7 +24,17 @@ void PlayerSystem(
     {
     case PLAYER_STANDING:
     {
-        if (IsKeyDown(KEY_W))
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            Point p = PointAddDirection(PointFromVector(body->pos), player->facing);
+            player->attackingId = WorldAddPlayerAttack(world, p);
+            if (player->attackingId > 0)
+            {
+                player->attackingTimer = PLAYER_ATTACK_DURATION;
+                player->state = PLAYER_ATTACKING;
+            }
+        }
+        else if (IsKeyDown(KEY_W))
         {
             MoveStart(body, move, DirectionFace(player->facing, FORWARD));
             player->state = PLAYER_STEPPING;
@@ -79,6 +91,18 @@ void PlayerSystem(
             PlayerUpdateCamera(body, player, camera);
         }
     }
+    break;
+
+    case PLAYER_ATTACKING:
+    {
+        player->attackingTimer -= delta;
+        if (player->attackingTimer <= 0)
+        {
+            WorldClearEntity(world, player->attackingId);
+            player->state = PLAYER_STANDING;
+        }
+    }
+    break;
     }
 }
 

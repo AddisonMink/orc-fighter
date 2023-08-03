@@ -4,6 +4,7 @@
 #include <movesystem.h>
 #include <observersystem.h>
 #include <orcsystem.h>
+#include <overlayspritesystem.h>
 #include <playersystem.h>
 
 void BodyInit(Body *body, Point p)
@@ -42,6 +43,11 @@ void ObserverInit(Observer *observer)
     observer->canSeePlayer = false;
 }
 
+void OverlaySpriteInit(OverlaySprite *sprite)
+{
+    sprite->valid = true;
+}
+
 void PlayerInit(Player *player)
 {
     player->valid = true;
@@ -73,6 +79,9 @@ void WorldInit(World *world)
         world->observers[i].id = i;
         world->observers[i].valid = false;
 
+        world->overlaySprites[i].id = i;
+        world->overlaySprites[i].valid = false;
+
         world->players[i].id = i;
         world->players[i].valid = false;
 
@@ -87,15 +96,45 @@ void WorldRunSystems(
     float delta)
 {
     ObserverSystem(world->bodies, world->observers, world->players);
-    PlayerSystem(world->bodies, world->moves, world->players, camera, delta);
+    PlayerSystem(world, world->bodies, world->moves, world->players, camera, delta);
     OrcSystem(world->bodies, world->moves, world->observers, world->orcs);
     MoveSystem(world->bodies, world->moves, delta);
 }
 
-void WorldRunDraw3DSystems(
-    World *world)
+void WorldRunDraw3DSystems(World *world)
 {
     DrawSystem(world->bodies, world->draws);
+}
+
+void WorldRunDraw2DSystems(World *world)
+{
+    OverlaySpriteSystem(world->overlaySprites);
+}
+
+void WorldClearEntity(World *world, Id id)
+{
+    world->valids[id] = false;
+    world->bodies[id].valid = false;
+    world->moves[id].valid = false;
+    world->draws[id].valid = false;
+    world->observers[id].valid = false;
+    world->overlaySprites[id].valid = false;
+    world->orcs[id].valid = false;
+    world->players[id].valid = false;
+}
+
+Id WorldInitEntity(World *world)
+{
+    Id id = -1;
+    for (int i = 1; i < NUM_ENTITIES; i++)
+        if (!world->valids[i])
+        {
+            world->valids[i] = true;
+            id = i;
+            break;
+        }
+
+    return id;
 }
 
 void WorldAddPlayer(
@@ -112,21 +151,25 @@ void WorldAddPlayer(
     PlayerInit(&world->players[PLAYER_ID]);
 }
 
-int WorldAddOrc(
+Id WorldAddPlayerAttack(
     World *world,
     Point p)
 {
-    int id = -1;
-    for (int i = 1; i < NUM_ENTITIES; i++)
-        if (!world->valids[i])
-        {
-            world->valids[i] = true;
-            id = i;
-            break;
-        }
+    Id id = WorldInitEntity(world);
+    if (id < 0)
+        return id;
 
-    if (id < 1)
-        return -1;
+    OverlaySpriteInit(&world->overlaySprites[id]);
+    return id;
+}
+
+Id WorldAddOrc(
+    World *world,
+    Point p)
+{
+    int id = WorldInitEntity(world);
+    if (id < 0)
+        return id;
 
     const float moveSpeed = 3.0;
     const float mvoeCooldown = 0.1;

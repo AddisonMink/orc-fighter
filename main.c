@@ -1,11 +1,14 @@
 #include <raylib.h>
 #include <components.h>
+#include <textures.h>
 
 int main(void)
 {
     const int screenWidth = 800;
     const int screenHeight = 450;
     InitWindow(screenWidth, screenHeight, "Orc Fighter!");
+
+    PlayerAttackTexture = LoadTexture("resources/player-attack.png");
 
     Camera3D camera = {0};
     camera.up = (Vector3){0.0f, 1.0f, 0.0f};
@@ -25,12 +28,16 @@ int main(void)
 
         BeginDrawing();
         ClearBackground(BLACK);
+
         BeginMode3D(camera);
         WorldRunDraw3DSystems(&world);
         EndMode3D();
+
+        WorldRunDraw2DSystems(&world);
         EndDrawing();
     }
 
     CloseWindow();
+    UnloadTexture(PlayerAttackTexture);
     return 0;
 }

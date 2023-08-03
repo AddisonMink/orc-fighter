@@ -4,6 +4,7 @@
 #include <components.h>
 
 void PlayerSystem(
+    World *world,
     Body *bodies,
     Move *moves,
     Player *players,

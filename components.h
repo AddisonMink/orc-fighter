@@ -63,11 +63,20 @@ typedef struct Observer
 
 void ObserverInit(Observer *observer);
 
+typedef struct OverlaySprite
+{
+    Id id;
+    bool valid;
+} OverlaySprite;
+
+void OverlaySpriteInit(OverlaySprite *sprite);
+
 typedef enum PlayerState
 {
     PLAYER_STANDING,
     PLAYER_STEPPING,
     PLAYER_TURNING,
+    PLAYER_ATTACKING,
 } PlayerState;
 
 // Component
@@ -79,6 +88,8 @@ typedef struct Player
     Direction facing;
     RelativeDirection turningDir;
     float turningProgress;
+    float attackingTimer;
+    Id attackingId;
 } Player;
 
 void PlayerInit(Player *player);
@@ -106,6 +117,7 @@ typedef struct World
     Move moves[NUM_ENTITIES];
     Draw draws[NUM_ENTITIES];
     Observer observers[NUM_ENTITIES];
+    OverlaySprite overlaySprites[NUM_ENTITIES];
     Player players[NUM_ENTITIES];
     Orc orcs[NUM_ENTITIES];
 } World;
@@ -117,15 +129,22 @@ void WorldRunSystems(
     Camera3D *camera,
     float delta);
 
-void WorldRunDraw3DSystems(
-    World *world);
+void WorldRunDraw3DSystems(World *world);
+
+void WorldRunDraw2DSystems(World *world);
+
+void WorldClearEntity(World *world, Id id);
 
 void WorldAddPlayer(
     World *world,
     Camera3D *camera,
     Point p);
 
-int WorldAddOrc(
+Id WorldAddPlayerAttack(
+    World *world,
+    Point p);
+
+Id WorldAddOrc(
     World *world,
     Point p);
 

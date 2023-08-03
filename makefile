@@ -23,6 +23,7 @@ game:
 	systems/movesystem.c \
 	systems/observersystem.c \
 	systems/orcsystem.c \
+	systems/overlayspritesystem.c \
 	systems/playersystem.c \
 	-I . \
 	-I systems/ \
