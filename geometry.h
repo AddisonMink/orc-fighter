@@ -25,6 +25,8 @@ Vector3 DirectionVector(Direction dir);
 
 Direction DirectionFace(Direction dir, RelativeDirection rel);
 
+Vector3 DirectionTurnToward(Direction d, RelativeDirection dir, float fraction);
+
 typedef struct Point
 {
     int x;

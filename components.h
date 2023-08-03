@@ -49,6 +49,7 @@ typedef enum PlayerState
 {
     PLAYER_STANDING,
     PLAYER_STEPPING,
+    PLAYER_TURNING,
 } PlayerState;
 
 // Component
@@ -57,6 +58,8 @@ typedef struct Player
     bool valid;
     PlayerState state;
     Direction facing;
+    RelativeDirection turningDir;
+    float turningProgress;
 } Player;
 
 void PlayerInit(Player *player);

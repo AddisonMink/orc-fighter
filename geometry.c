@@ -1,4 +1,5 @@
 #include <geometry.h>
+#include <raymath.h>
 
 const Vector3 DIRECTION_VECTORS[4] = {
     (Vector3){0, 0, 1},  // North
@@ -47,6 +48,16 @@ Direction DirectionFace(Direction dir, RelativeDirection rel)
     case RIGHT:
         return DIRECTION_RIGHTS[dir];
     }
+}
+
+Vector3 DirectionTurnToward(Direction d, RelativeDirection dir, float fraction)
+{
+    Vector3 from = DirectionVector(d);
+    Vector3 to = DirectionVector(DirectionFace(d, dir));
+
+    return Vector3Normalize(Vector3Add(
+        Vector3Scale(from, 1 - fraction),
+        Vector3Scale(to, fraction)));
 }
 
 bool PointEqual(Point p1, Point p2)

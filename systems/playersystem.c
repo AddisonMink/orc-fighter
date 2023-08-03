@@ -1,6 +1,8 @@
 #include <playersystem.h>
 #include <raymath.h>
 
+#define PLAYER_TURNING_SPEED PI
+
 void PlayerUpdateCamera(Body *body, Player *player, Camera3D *camera);
 
 void PlayerSystem(
@@ -41,18 +43,44 @@ void PlayerSystem(
             MoveStart(body, move, DirectionFace(player->facing, LEFT));
             player->state = PLAYER_STEPPING;
         }
+        else if (IsKeyPressed(KEY_D))
+        {
+            player->turningDir = LEFT;
+            player->turningProgress = 0;
+            player->state = PLAYER_TURNING;
+        }
+        else if (IsKeyPressed(KEY_A))
+        {
+            player->turningDir = RIGHT;
+            player->turningProgress = 0;
+            player->state = PLAYER_TURNING;
+        }
+        PlayerUpdateCamera(bodies, player, camera);
     }
     break;
 
     case PLAYER_STEPPING:
     {
+        PlayerUpdateCamera(bodies, player, camera);
         if (move->state == MOVE_STILL)
             player->state = PLAYER_STANDING;
     }
     break;
-    }
 
-    PlayerUpdateCamera(bodies, player, camera);
+    case PLAYER_TURNING:
+    {
+        player->turningProgress += PLAYER_TURNING_SPEED * delta;
+        Vector3 vector = DirectionTurnToward(player->facing, player->turningDir, player->turningProgress);
+        camera->target = Vector3Add(camera->position, vector);
+
+        if (player->turningProgress >= 1)
+        {
+            player->facing = DirectionFace(player->facing, player->turningDir);
+            player->state = PLAYER_STANDING;
+            PlayerUpdateCamera(body, player, camera);
+        }
+    }
+    }
 }
 
 void PlayerUpdateCamera(Body *body, Player *player, Camera3D *camera)
