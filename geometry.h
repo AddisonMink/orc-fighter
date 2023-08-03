@@ -37,6 +37,12 @@ bool PointEqual(Point p1, Point p2);
 
 Point PointAdd(Point p1, Point p2);
 
+Point PointSubtract(Point p1, Point p2);
+
+Direction PointToward(Point p1, Point p2);
+
+Point PointAddDirection(Point p, Direction dir);
+
 Vector3 PointToVector(Point p);
 
 Point PointFromVector(Vector3 v);

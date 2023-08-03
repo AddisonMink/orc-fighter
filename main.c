@@ -14,7 +14,7 @@ int main(void)
 
     World world;
     WorldInit(&world);
-    WorldAddPlayer(&world, &camera, (Point){5, 5});
+    WorldAddPlayer(&world, &camera, (Point){10, 7});
     WorldAddOrc(&world, (Point){5, 8});
 
     SetTargetFPS(60);

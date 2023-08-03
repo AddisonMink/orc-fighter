@@ -24,7 +24,7 @@ void MoveSystem(
             continue;
         }
 
-        MoveUpdate(bodies, move, delta);
+        MoveUpdate(body, move, delta);
     }
 }
 
@@ -73,7 +73,9 @@ void MoveUpdate(Body *body, Move *move, float delta)
     {
         Vector3 vector = Vector3Scale(DirectionVector(move->dir), move->speed * delta);
         body->pos = Vector3Add(body->pos, vector);
-        if (Vector3Distance(body->pos, PointToVector(move->dest)) <= TOLERANCE)
+
+        float distance = Vector3Distance(body->pos, PointToVector(move->dest));
+        if (distance <= TOLERANCE)
         {
             body->pos = PointToVector(move->dest);
             move->state = MOVE_STILL;

@@ -17,7 +17,6 @@ void PlayerSystem(
     Player *player = &players[PLAYER_ID];
 
     Point p = PointFromVector(body->pos);
-    TraceLog(LOG_INFO, TextFormat("point = %d, %d", p.x, p.y));
 
     switch (player->state)
     {

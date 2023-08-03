@@ -21,6 +21,8 @@ game:
 	components.c \
 	systems/drawsystem.c \
 	systems/movesystem.c \
+	systems/observersystem.c \
+	systems/orcsystem.c \
 	systems/playersystem.c \
 	-I . \
 	-I systems/ \

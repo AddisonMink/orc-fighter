@@ -2,6 +2,8 @@
 #include <raymath.h>
 #include <drawsystem.h>
 #include <movesystem.h>
+#include <observersystem.h>
+#include <orcsystem.h>
 #include <playersystem.h>
 
 void BodyInit(Body *body, Point p)
@@ -20,7 +22,7 @@ void MoveInit(Move *move, float speed)
 void MoveStart(Body *body, Move *move, Direction dir)
 {
     move->dir = dir;
-    move->dest = PointAdd(PointFromVector(body->pos), PointFromVector(DirectionVector(dir)));
+    move->dest = PointAddDirection(PointFromVector(body->pos), dir);
     move->state = MOVE_STARTING;
 }
 
@@ -28,6 +30,12 @@ void DrawInit(Draw *draw, Color color)
 {
     draw->valid = true;
     draw->color = color;
+}
+
+void ObserverInit(Observer *observer)
+{
+    observer->valid = true;
+    observer->canSeePlayer = false;
 }
 
 void PlayerInit(Player *player)
@@ -40,6 +48,7 @@ void PlayerInit(Player *player)
 void OrcInit(Orc *orc)
 {
     orc->valid = true;
+    orc->state = ORC_STANDING;
 }
 
 void WorldInit(World *world)
@@ -47,10 +56,23 @@ void WorldInit(World *world)
     for (int i = 0; i < NUM_ENTITIES; i++)
     {
         world->valids[i] = false;
+
+        world->bodies[i].id = i;
         world->bodies[i].valid = false;
+
+        world->moves[i].id = i;
         world->moves[i].valid = false;
+
+        world->draws[i].id = i;
         world->draws[i].valid = false;
+
+        world->observers[i].id = i;
+        world->observers[i].valid = false;
+
+        world->players[i].id = i;
         world->players[i].valid = false;
+
+        world->orcs[i].id = i;
         world->orcs[i].valid = false;
     }
 }
@@ -60,7 +82,9 @@ void WorldRunSystems(
     Camera3D *camera,
     float delta)
 {
+    ObserverSystem(world->bodies, world->observers, world->players);
     PlayerSystem(world->bodies, world->moves, world->players, camera, delta);
+    OrcSystem(world->bodies, world->moves, world->observers, world->orcs);
     MoveSystem(world->bodies, world->moves, delta);
 }
 
@@ -91,6 +115,7 @@ int WorldAddOrc(
     for (int i = 1; i < NUM_ENTITIES; i++)
         if (!world->valids[i])
         {
+            world->valids[i] = true;
             id = i;
             break;
         }
@@ -103,6 +128,7 @@ int WorldAddOrc(
     BodyInit(&world->bodies[id], p);
     MoveInit(&world->moves[id], moveSpeed);
     DrawInit(&world->draws[id], DARKGREEN);
+    ObserverInit(&world->observers[id]);
     OrcInit(&world->orcs[id]);
     return id;
 }

@@ -1,5 +1,6 @@
 #include <geometry.h>
 #include <raymath.h>
+#include <stdlib.h>
 
 const Vector3 DIRECTION_VECTORS[4] = {
     (Vector3){0, 0, 1},  // North
@@ -27,6 +28,13 @@ const Direction DIRECTION_REVERSES[4] = {
     NORTH,
     WEST,
     EAST,
+};
+
+const Point DIRECTION_POINTS[4] = {
+    (Point){0, 1},
+    (Point){0, -1},
+    (Point){1, 0},
+    (Point){-1, 0},
 };
 
 Vector3
@@ -68,6 +76,27 @@ bool PointEqual(Point p1, Point p2)
 Point PointAdd(Point p1, Point p2)
 {
     return (Point){p1.x + p2.x, p1.y + p2.y};
+}
+
+Point PointSubtract(Point p1, Point p2)
+{
+    return (Point){p2.x - p1.x, p2.y - p1.y};
+}
+
+Direction PointToward(Point p1, Point p2)
+{
+    Direction dir;
+    Point diff = PointSubtract(p1, p2);
+    if (abs(diff.x) >= abs(diff.y))
+        dir = diff.x > 0 ? EAST : WEST;
+    else
+        dir = diff.y > 0 ? NORTH : SOUTH;
+    return dir;
+}
+
+Point PointAddDirection(Point p, Direction dir)
+{
+    return PointAdd(p, DIRECTION_POINTS[dir]);
 }
 
 Vector3 PointToVector(Point p)
