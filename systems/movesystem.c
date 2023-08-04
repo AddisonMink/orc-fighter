@@ -1,5 +1,6 @@
 #include <movesystem.h>
 #include <raymath.h>
+#include <map.h>
 
 #define TOLERANCE 0.05
 
@@ -31,6 +32,8 @@ void MoveSystem(
 bool MoveIsBlocked(Body *bodies, Move *moves, int id, Point pos)
 {
     bool blocked = false;
+    if (!MapInBounds(pos))
+        return true;
 
     for (int i = 0; i < NUM_ENTITIES; i++)
     {

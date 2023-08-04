@@ -1,7 +1,7 @@
 #include <game.h>
 #include <raymath.h>
 
-const Point GAME_PLAYER_POINT = {7, 0};
+const Point GAME_PLAYER_POINT = {5, 1};
 const Point GAME_ORC_POINT = {5, 8};
 
 const int SCREEN_WIDTH = 800;

@@ -9,6 +9,7 @@
 #include <playersystem.h>
 #include <textures.h>
 #include <damagesystem.h>
+#include <map.h>
 
 void BodyInit(Body *body, Point p)
 {
@@ -127,6 +128,7 @@ void WorldRunSystems(
 
 void WorldRunDraw3DSystems(World *world, Camera3D *camera)
 {
+    DrawMap3D();
     DrawSystem(world->bodies, world->draws, camera);
 }
 
