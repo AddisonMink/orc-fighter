@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <components.h>
 #include <textures.h>
+#include <game.h>
 
 int main(void)
 {
@@ -16,25 +17,21 @@ int main(void)
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 
-    World world;
-    WorldInit(&world);
-    WorldAddPlayer(&world, &camera, (Point){7, 0});
-    WorldAddOrc(&world, (Point){5, 8});
+    Game game;
+    GameInit(&game, &camera);
 
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
     {
-        WorldRunSystems(&world, &camera, GetFrameTime());
+        GameUpdate(&game, &camera, GetFrameTime());
 
         BeginDrawing();
         ClearBackground(BLACK);
-
         BeginMode3D(camera);
-        WorldRunDraw3DSystems(&world, &camera);
+        GameDraw3D(&game, &camera);
         EndMode3D();
-
-        WorldRunDraw2DSystems(&world);
+        GameDraw2D(&game);
         EndDrawing();
     }
 

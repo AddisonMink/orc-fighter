@@ -17,6 +17,7 @@
 
 game:
 	$(CC) main.c \
+	game.c \
 	geometry.c \
 	components.c \
 	textures.c \
