@@ -204,7 +204,7 @@ Id WorldAddOrc(
         return id;
 
     const float moveSpeed = 2.5;
-    const float moveCooldown = 0.1;
+    const float moveCooldown = 0.2;
 
     BodyInit(&world->bodies[id], p);
     MoveInit(&world->moves[id], moveSpeed, moveCooldown);

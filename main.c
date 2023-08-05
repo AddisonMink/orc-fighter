@@ -18,7 +18,7 @@ int main(void)
     camera.projection = CAMERA_PERSPECTIVE;
 
     Game game;
-    GameInit(&game, &camera);
+    GameInit(&game, &camera, 1);
 
     SetTargetFPS(60);
 
